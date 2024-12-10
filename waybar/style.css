@@ -78,7 +78,7 @@ tooltip {
 
 #cpu, #memory, 
 #bluetooth, #pulseaudio, #backlight, 
-#devices, #system, #battery, #custom-power {
+#devices, #system, #battery, #network, #custom-power {
     padding: 0px 0.8em;
 }
 
