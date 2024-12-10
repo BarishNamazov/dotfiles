@@ -1,0 +1,49 @@
+#window {
+	border: 4px solid rgba(--wofi-rgb-color1, 0.9);
+	border-radius: 10px;
+	background-color: rgba(0, 0, 0, 0.7);
+	font-size: 1.5em;
+}
+
+#outer-box {
+	margin: 4px;
+	padding: 1px;
+}
+
+#input {
+	background-color: transparent;
+	color: --wofi-color0;
+	margin: 4px;
+	padding: 0.5em;
+}
+
+#input image:first-child {
+	margin-left: -100px;
+}
+
+#input image:last-child {
+	margin-right: -100px;
+}
+
+#entry {
+	color: --wofi-color0;
+}
+
+#entry:selected {
+	background-color: rgba(--wofi-rgb-color0, 0.9);
+}
+
+#text:selected {
+	color: --wofi-color1;
+}
+
+#img {
+	margin-right: 5px;
+	margin-left: 3px;
+	margin-top: 3px;
+	margin-bottom: 3px;
+}
+
+#text {
+	margin-left: 3px;
+}
