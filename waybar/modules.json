@@ -1,0 +1,160 @@
+{
+    "clock": {
+        "format": "{:%R — %A, %B %d %Y}",
+
+        "tooltip-format": "<tt>{calendar}</tt>",
+        "calendar": {
+            "mode": "month",
+            "mode-mon-col": 3,
+            "on-scroll": 1,
+            "on-click": "mode",
+            "format": {
+                "months": "<span color='#A5949B'><b>{}</b></span>",
+                "weekdays": "<span color='#D9A99C'><b>{}</b></span>",
+                "today": "<span color='#A5949B'><b>{}</b></span>"
+            }
+        },
+        "actions": {
+            "on-click": "mode",
+            "on-click-forward": "tz_up",
+            "on-click-backward": "tz_down",
+            "on-scroll-up": "shift_up",
+            "on-scroll-down": "shift_down"
+        }
+    },
+
+    "group/devices": {
+        "orientation": "horizontal",
+        "modules": [
+            "cpu",
+	    "memory",
+            "pulseaudio",
+            "bluetooth",
+            "backlight",
+            "network"
+         ]
+    },
+
+    "group/system": {
+        "orientation": "horizontal",
+        "modules": [
+	    "battery",
+            "custom/power"
+         ]
+    },
+
+    "bluetooth": {
+        "format": "",
+        "format-disabled": "",
+        "format-connected": " {num_connections}",
+        "on-click": "blueman-manager",
+        "on-click-right": "blueman-manager",
+        "tooltip-format": " {device_alias}",
+        "tooltip-format-connected": "{device_enumerate}",
+        "tooltip-format-enumerate-connected": " {device_alias}"
+    },
+
+    "cpu": {
+        "interval": 10,
+        "format": " {usage}%"
+    },
+
+    "backlight": {
+        "format": " {percent}%"
+    },
+
+    "memory": {
+        "interval": 30,
+        "format": " {percentage}%",
+        "format-alt": " {used:0.1f} GB"
+    },
+
+    "network": {
+        "format-wifi": "󰤨 {essid}",
+        "format-alt": "󰤨 {signalStrength}%",
+        "format-ethernet": "󱘖 Wired",
+        "tooltip-format": "󱘖 {ipaddr}  {bandwidthUpBytes}  {bandwidthDownBytes}",
+        "format-linked": "󱘖 {ifname} (No IP)",
+        "format-disconnected": " Disconnected",
+        "on-double-click": "kitty --class nmtui -e nmtui",
+        "interval": 5
+    },
+
+    "battery": {
+	"bat": "BAT0",
+	"interval": 60,
+	"states": {
+		"warning": 30,
+		"critical": 15
+	},
+	"format": "{capacity}% {icon}",
+	"format-icons": ["", "", "", "", ""],
+	"max-length": 25
+    },
+
+    "custom/power": {
+        "format": " {}",
+        "exec": "echo ; echo  logout",
+        "on-click": "hyprlock",
+        "interval" : 86400, // once every day
+        "tooltip": false
+    },
+
+    "pulseaudio": {
+        "format": "{icon} {volume}%",
+        "format-muted": "",
+        "tooltip-format": "{icon} {desc}",
+	"on-click": "pavucontrol",
+        "format-icons": {
+            "headphone": ["", "", ""],
+            "hands-free": "",
+            "headset": "",
+            "phone": "",
+            "portable": "",
+            "car": "",
+            "default": ["", "", ""]
+        }
+    },
+
+    "pulseaudio#microphone": {
+        "format": "{format_source}",
+        "format-source": "",
+        "format-source-muted": "",
+        "on-click": "pavucontrol -t 4",
+        "on-click-middle": "~/.config/hypr/scripts/volumecontrol.sh -i m",
+        "on-scroll-up": "~/.config/hypr/scripts/volumecontrol.sh -i i",
+        "on-scroll-down": "~/.config/hypr/scripts/volumecontrol.sh -i d",
+        "tooltip-format": "{format_source} {source_desc} // {source_volume}%",
+        "scroll-step": 5
+    },
+
+    "custom/spotify": {
+        "exec": "/usr/bin/python3 $HOME/.config/waybar/modules/mediaplayer.py --player spotify",
+        "format": " {}",
+        "return-type": "json",
+        "on-click": "playerctl play-pause --player spotify",
+        "on-click-right": "playerctl next --player spotify",
+        "on-click-middle": "playerctl previous --player spotify",
+        "on-scroll-up": "~/.config/hypr/scripts/spotifyvolumecontrol.sh up",
+        "on-scroll-down": "~/.config/hypr/scripts/spotifyvolumecontrol.sh down",
+        "max-length": 25,
+        "escape": true,
+        "tooltip": true
+    },
+
+    "tray": {
+        "icon-size": {},
+        "spacing": 5
+    },
+
+    "hyprland/workspaces": {
+        "on-scroll-up": "hyprctl dispatch workspace -1",
+        "on-scroll-down": "hyprctl dispatch workspace +1",
+        "all-outputs": true,
+        "active-only": false,
+        "on-click": "activate",
+        "persistent-workspaces": {
+    	    "*": 5
+        }
+    }
+}

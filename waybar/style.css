@@ -1,0 +1,134 @@
+@import 'colors.css';
+
+@define-color workspaces rgba(0, 0, 0, 0.6);
+@define-color clock @foreground;
+@define-color devices rgba(0, 0, 0, 0.6);
+@define-color system rgba(0, 0, 0, 0.4);
+/* workspace text colors */
+@define-color workspace_fg @foreground;
+@define-color act_wrk_fg rgba(0, 0, 0, 1);
+@define-color act_wrk_bg rgba(255, 255, 255, 0.8);
+@define-color use_wrk_fg @color5;
+/* workspace button-background colors */
+@define-color workspace_bg rgba(0, 0, 0, 0.6);
+
+* {
+    font-family: "BlexMono Nerd Font", FontAwesome6Free, SymbolsNerdFont;
+    font-weight: bold;
+    min-height: 16px;
+}
+
+window#waybar {
+    color: @foreground;
+    background: black;
+}
+
+tooltip {
+    background: @background;
+    color: @foreground;
+    border-radius: 7px;
+    border-width: 0px;
+}
+
+#workspaces {
+    padding: 4px 10px;
+}
+
+/* Only focused workspace*/
+#workspaces button.active {
+    color:  @act_wrk_fg;
+    background: @act_wrk_bg;
+    border: none;
+    padding: 1px 2px;
+    margin: 1px 4px;
+    transition: all 0.3s ease-in-out;
+}
+
+/* Unfocused workspace WITH opened Apps
+   !!! Border style is valid for ALL buttons,
+   Set seperate border style for every button. */
+#workspaces button {
+    color: @workspace_fg;
+    background: @workspace_bg;
+    padding: 1px 2px;
+    margin: 1px 4px;
+    transition: all 0.3s ease-in-out;
+}
+
+#workspaces button:not(.empty):not(.active) {
+    color: @use_wrk_fg;
+    padding: 1px 2px;
+    margin: 1px 4px;
+}
+
+/*
+   OTHER POSSIBLE DESIGN-ATTRIBUTES:
+      #workspaces button.empty
+      #workspaces button.persistent
+      #workspaces button:not(.persistent)
+      #workspaces button:not(.active) usw.
+*/
+
+#clock {
+    font-weight: bold;
+    font-size: 1.3rem;
+    color: @clock;
+    opacity: 1;
+}
+
+#cpu, #memory, 
+#bluetooth, #pulseaudio, #backlight, 
+#devices, #system, #battery, #custom-power {
+    padding: 0px 0.8em;
+}
+
+#battery {
+    padding-right: 1em;
+}
+
+#l-workspaces, #r-workspaces, #l-devices, #r-devices, #l-system, #r-system {
+background: transparent;
+min-height:0px;
+}
+
+#l-workspaces {
+border-left: 15px solid transparent;
+border-bottom: 30px solid @workspaces;
+}
+
+#r-workspaces {
+border-left: 15px solid @workspaces;
+border-bottom: 30px solid transparent;
+}
+
+#workspaces {
+background: @workspaces;
+}
+
+#l-devices {
+border-left: 15px solid transparent;
+border-bottom: 30px solid @devices;
+}
+
+#r-devices {
+border-left: 15px solid @devices;
+border-bottom: 30px solid transparent;
+}
+
+#devices {
+background: @devices;
+}
+
+#l-system {
+border-left: 15px solid transparent;
+border-bottom: 30px solid @system;
+}
+
+#r-system {
+border-left: 15px solid @system;
+border-bottom: 30px solid transparent;
+}
+
+#system {
+background: @system;
+}

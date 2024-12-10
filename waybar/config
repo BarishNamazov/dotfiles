@@ -1,0 +1,29 @@
+{
+    "layer": "top",
+    "position": "top",
+    "mod": "dock",
+    "height": 35,
+    "exclusive": true,
+    "passthrough": false,
+    "gtk-layer-shell": true,
+
+    "include": ["~/.config/waybar/modules.json"],
+
+    "modules-left": [
+	"group/l-workspaces",
+        "hyprland/workspaces",
+	"group/r-workspaces",
+    ],
+
+    "modules-center": [
+        "clock"
+    ],
+
+    "modules-right": [
+	"group/l-devices",
+        "group/devices",
+	"group/r-devices",
+	"group/l-system",
+        "group/system"
+    ],
+}
