@@ -81,14 +81,17 @@
     },
 
     "battery": {
+	"interval": 5,
 	"bat": "BAT0",
-	"interval": 60,
 	"states": {
 		"warning": 30,
 		"critical": 15
 	},
 	"format": "{capacity}% {icon}",
-	"format-icons": ["", "", "", "", ""],
+	"format-icons": {
+	    "default": ["", "", "", "", ""],
+	    "charging": ""
+	},
 	"max-length": 25
     },
 
