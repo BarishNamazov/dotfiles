@@ -33,3 +33,15 @@ autocmd('TextYankPost', {
         })
     end,
 })
+
+-- Set the working directory to the argument of vim
+vim.api.nvim_create_autocmd("VimEnter", {
+    callback = function()
+        local args = vim.fn.argv()
+        if #args > 0 then
+            local dir = vim.fn.fnamemodify(args[1], ":p:h")
+            vim.cmd("cd " .. dir)
+        end
+    end,
+})
+
