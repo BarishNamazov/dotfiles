@@ -6,24 +6,23 @@
     "exclusive": true,
     "passthrough": false,
     "gtk-layer-shell": true,
-
-    "include": ["~/.config/waybar/modules.json"],
-
-    "modules-left": [
-	"group/l-workspaces",
-        "hyprland/workspaces",
-	"group/r-workspaces",
+    "include": [
+        "~/.config/waybar/modules.json"
     ],
-
+    "modules-left": [
+        "group/l-workspaces",
+        "hyprland/workspaces",
+        "group/r-workspaces",
+        "group/spotube"
+    ],
     "modules-center": [
         "clock"
     ],
-
     "modules-right": [
-	"group/l-devices",
+        "group/l-devices",
         "group/devices",
-	"group/r-devices",
-	"group/l-system",
+        "group/r-devices",
+        "group/l-system",
         "group/system"
-    ],
+    ]
 }
