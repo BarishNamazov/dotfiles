@@ -92,7 +92,7 @@
     "custom/power": {
         "format": " {}",
         "exec": "echo ; echo  logout",
-        "on-click": "hyprlock",
+        "on-click": "systemctl poweroff",
         "interval": 86400,
         "tooltip": false
     },
