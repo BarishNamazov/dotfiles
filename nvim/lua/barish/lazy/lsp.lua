@@ -27,6 +27,10 @@ return {
             vim.lsp.protocol.make_client_capabilities(),
             cmp_lsp.default_capabilities())
 
+        local on_attach = function(_,  bufnr)
+            vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
+        end
+
         require("fidget").setup({})
         require("mason").setup()
         require("mason-lspconfig").setup({
@@ -39,7 +43,8 @@ return {
             handlers = {
                 function(server_name) -- default handler (optional)
                     require("lspconfig")[server_name].setup {
-                        capabilities = capabilities
+                        capabilities = capabilities,
+                        on_attach = on_attach
                     }
                 end,
 
@@ -71,8 +76,9 @@ return {
             mapping = cmp.mapping.preset.insert({
                 ['<C-p>'] = cmp.mapping.select_prev_item(cmp_select),
                 ['<C-n>'] = cmp.mapping.select_next_item(cmp_select),
+                -- ["<C-Space>"] = cmp.mapping.complete(),
                 ['<C-y>'] = cmp.mapping.confirm({ select = true }),
-                ["<C-Space>"] = cmp.mapping.complete(),
+                ['<C-Space>'] = cmp.mapping.confirm({ select = true }),
             }),
             sources = cmp.config.sources({
                 { name = 'nvim_lsp' },
@@ -93,5 +99,9 @@ return {
                 prefix = "",
             },
         })
-    end
+    end,
+
+    opts = {
+        inlay_hints = true
+    }
 }

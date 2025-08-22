@@ -48,7 +48,3 @@ vim.keymap.set("n", "<leader>x", "<cmd>!chmod +x %<CR>", { silent = true })
 -- Make it rain
 vim.keymap.set("n", "<leader>mr", "<cmd>CellularAutomaton make_it_rain<CR>");
 
--- Shoutout the current file
-vim.keymap.set("n", "<leader><leader>", function()
-    vim.cmd("so")
-end)
