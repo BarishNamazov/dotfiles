@@ -101,6 +101,7 @@ setup_prompt() {
 setup_path() {
     export PATH="$HOME/bin:$HOME/.local/bin:$PATH"
     export PATH="$PATH:/usr/local/bin:/usr/local/sbin"
+    export PATH="$HOME/.npm-global/bin:$PATH"
 }
 
 setup_history() {

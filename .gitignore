@@ -4,6 +4,10 @@
 # ... Except
 !.gitignore
 !.bashrc
+!.npmrc
+!.tmux.conf
+!.clang-format
+!symlinks.sh
 
 !hypr/
 !hypr/**
