@@ -5,21 +5,65 @@ return {
         "williamboman/mason.nvim",
         "neovim/nvim-lspconfig",
         "hrsh7th/cmp-nvim-lsp",
+        "WhoIsSethDaniel/mason-tool-installer.nvim",
     },
     config = function()
-        local servers = {
-            -- Lua, for neovim
-            "lua_ls",
-
-            -- TypeScript / Web Dev
-            "eslint",
+        local tools = {
+            "json-lsp",
+            "jq",
+            "css-lsp",
+            "beautysh",
+            "eslint-lsp",
+            "astro-language-server",
+            "bash-language-server",
+            "markdownlint",
+            "lua-language-server",
+            "prettier",
+            "prettierd",
+            "rust-analyzer",
+            "shfmt",
+            "cmake-language-server",
+            "cmakelang",
+            "starpls",
+            "bazelrc-lsp",
+            "bzl",
+            "yaml-language-server",
+            "eslint_d",
             "vtsls",
+            "clang-format",
+            "htmlhint",
+            "ruff",
+            "pyright",
+            "mdx-analyzer",
+            "clangd",
+            "vue-language-server",
+        }
 
-            -- C++
-            "clangd"
+        local servers = {
+            "astro",
+            "bashls",
+            "bazelrc_lsp",
+            "bzl",
+            "clangd",
+            "cmake",
+            "cssls",
+            "eslint",
+            "jsonls",
+            "lua_ls",
+            "mdx_analyzer",
+            "pyright",
+            "rust_analyzer",
+            "starpls",
+            "vtsls",
+            "yamlls",
         }
 
         require("mason").setup()
+        require("mason-tool-installer").setup({
+            ensure_installed = tools,
+            auto_update = false,
+            run_on_start = true,
+        })
 
         local capabilities = vim.lsp.protocol.make_client_capabilities()
         local cmp_capabilities = require("cmp_nvim_lsp").default_capabilities()
