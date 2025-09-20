@@ -80,26 +80,30 @@ setup_colors() {
 setup_prompt() {
     # Function to set prompt dynamically
     set_prompt() {
-        # Check the return code of the last command
         local ret_code=$?
 
-        # Determine the color for the "$" symbol
+        # Prompt symbol color based on last return code
         if [ $ret_code -ne 0 ]; then
             PROMPT_SYMBOL="${RED}\$"
         else
             PROMPT_SYMBOL="${RESET}\$"
         fi
 
-        # Set the PS1 prompt
-        PS1="${BLUE}\u@\h ${WHITE}\w${PURPLE} \$(parse_git_branch) ${PROMPT_SYMBOL} ${RESET} "
+        # Virtualenv indicator (basename of $VIRTUAL_ENV)
+        local venv=""
+        if [ -n "$VIRTUAL_ENV" ]; then
+            venv="(${VIRTUAL_ENV##*/}) "
+        fi
+
+        # Final PS1
+        PS1="${venv}${BLUE}\u@\h ${WHITE}\w${PURPLE} \$(parse_git_branch) ${PROMPT_SYMBOL} ${RESET} "
     }
 
-    # Exactly as before: base PROMPT_COMMAND is set_prompt
     PROMPT_COMMAND=set_prompt
 }
 
 setup_path() {
-    export PATH="$HOME/bin:$HOME/.local/bin:$PATH"
+    export PATH="$HOME/.local/bin:$PATH"
     export PATH="$PATH:/usr/local/bin:/usr/local/sbin"
     export PATH="$HOME/.npm-global/bin:$PATH"
 }
@@ -164,3 +168,7 @@ setup_xdg
 setup_completion
 setup_git_ps1
 setup_python_env
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"

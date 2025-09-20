@@ -31,13 +31,21 @@ vim.keymap.set({ "n", "v" }, "<leader>y", [["+y]])
 vim.keymap.set("n", "<leader>Y", [["+Y]])
 
 -- Format
-vim.keymap.set("n", "<leader>f", vim.lsp.buf.format)
+vim.keymap.set("n", "<leader>f", function()
+    local conform = require("conform")
+    local buf = vim.api.nvim_get_current_buf()
+    local ft = vim.bo[buf].filetype
 
--- Navitage through quick list/location list
-vim.keymap.set("n", "<C-k>", "<cmd>cnext<CR>zz")
-vim.keymap.set("n", "<C-j>", "<cmd>cprev<CR>zz")
-vim.keymap.set("n", "<leader>k", "<cmd>lnext<CR>zz")
-vim.keymap.set("n", "<leader>j", "<cmd>lprev<CR>zz")
+    -- Check if Conform has any formatters for this filetype
+    local formatters = conform.list_formatters(buf)
+    if formatters and #formatters > 0 then
+        -- Conform has a formatter, use it
+        conform.format({ async = true, lsp_fallback = true })
+    else
+        -- No formatter configured, use LSP directly
+        vim.lsp.buf.format({ async = true })
+    end
+end, { desc = "Format with Conform or fallback to LSP" })
 
 -- Start find and replace with the word under the cursor
 vim.keymap.set("n", "<leader>s", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]])
@@ -47,4 +55,3 @@ vim.keymap.set("n", "<leader>x", "<cmd>!chmod +x %<CR>", { silent = true })
 
 -- Make it rain
 vim.keymap.set("n", "<leader>mr", "<cmd>CellularAutomaton make_it_rain<CR>");
-

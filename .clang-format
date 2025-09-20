@@ -16,4 +16,5 @@ AlignTrailingComments: true
 Cpp11BracedListStyle: true
 DerivePointerAlignment: false
 PointerAlignment: Left
+InsertBraces: true
 

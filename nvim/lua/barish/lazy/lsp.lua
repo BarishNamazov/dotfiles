@@ -17,8 +17,21 @@ return {
     config = function()
         require("conform").setup({
             formatters_by_ft = {
-            }
+                javascript = { "prettierd", "prettier" },
+                typescript = { "prettierd", "prettier" },
+                javascriptreact = { "prettierd", "prettier" },
+                typescriptreact = { "prettierd", "prettier" },
+                vue = { "prettierd", "prettier" },
+                json = { "prettierd", "prettier" },
+                css = { "prettierd", "prettier" },
+                markdown = { "prettierd" },
+                cpp = { "clang_format" },
+                cmake = {},
+                bazel = {},
+                bzl = {},
+            },
         })
+
         local cmp = require('cmp')
         local cmp_lsp = require("cmp_nvim_lsp")
         local capabilities = vim.tbl_deep_extend(
@@ -27,7 +40,7 @@ return {
             vim.lsp.protocol.make_client_capabilities(),
             cmp_lsp.default_capabilities())
 
-        local on_attach = function(_,  bufnr)
+        local on_attach = function(_, bufnr)
             vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
         end
 
@@ -39,9 +52,12 @@ return {
                 "rust_analyzer",
                 "clangd",
                 "ruff",
+                "eslint",
+                "vtsls",
+                "vue_ls"
             },
             handlers = {
-                function(server_name) -- default handler (optional)
+                function(server_name)
                     require("lspconfig")[server_name].setup {
                         capabilities = capabilities,
                         on_attach = on_attach
@@ -51,6 +67,7 @@ return {
                 ["lua_ls"] = function()
                     local lspconfig = require("lspconfig")
                     lspconfig.lua_ls.setup {
+                        on_attach = on_attach,
                         capabilities = capabilities,
                         settings = {
                             Lua = {
@@ -62,6 +79,63 @@ return {
                         }
                     }
                 end,
+
+                ["eslint"] = function()
+                    local lspconfig = require("lspconfig")
+
+                    -- Determine which eslint executable to use
+                    local eslint_cmd = "eslint"
+                    if vim.fn.executable("eslint_d") == 1 then
+                        eslint_cmd = "eslint_d"
+                    end
+
+                    lspconfig.eslint.setup {
+                        capabilities = capabilities,
+                        on_attach = on_attach,
+                        settings = {
+                            eslint = {
+                                execPath = eslint_cmd,
+                            },
+                            format = { enable = true },
+                        },
+                    }
+                end,
+
+                ["vtsls"] = function()
+                    local lspconfig = require("lspconfig")
+                    local util = require("lspconfig.util")
+
+                    local vue_plugin = {
+                        name = '@vue/typescript-plugin',
+                        location = vim.fn.stdpath('data') ..
+                            '/mason/packages/vue-language-server/node_modules/@vue/language-server',
+                        languages = { 'vue' },
+                        configNamespace = 'typescript',
+                    }
+
+                    lspconfig.vtsls.setup {
+                        capabilities = capabilities,
+                        on_attach = on_attach,
+                        settings = {
+                            vtsls = {
+                                tsserver = {
+                                    globalPlugins = { vue_plugin }
+                                }
+                            }
+                        },
+                        filetypes = { 'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue' },
+                        root_dir = util.root_pattern("tsconfig.json", "jsconfig.json", "package.json", ".git")
+                    }
+                end,
+
+                ["vue_ls"] = function()
+                    local lspconfig = require("lspconfig")
+
+                    lspconfig.vue_ls.setup {
+                        capabilities = capabilities,
+                        on_attach = on_attach,
+                    }
+                end,
             }
         })
 
@@ -70,14 +144,12 @@ return {
         cmp.setup({
             snippet = {
                 expand = function(args)
-                    require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
+                    require('luasnip').lsp_expand(args.body)
                 end,
             },
             mapping = cmp.mapping.preset.insert({
                 ['<C-p>'] = cmp.mapping.select_prev_item(cmp_select),
                 ['<C-n>'] = cmp.mapping.select_next_item(cmp_select),
-                -- ["<C-Space>"] = cmp.mapping.complete(),
-                ['<C-y>'] = cmp.mapping.confirm({ select = true }),
                 ['<C-Space>'] = cmp.mapping.confirm({ select = true }),
             }),
             sources = cmp.config.sources({
@@ -97,7 +169,22 @@ return {
                 source = "always",
                 header = "",
                 prefix = "",
+                max_width = 80,
+                max_height = 20,
             },
+            virtual_text = {
+                spacing = 4,
+                prefix = "●",
+            },
+            signs = {
+                text = {
+                    [vim.diagnostic.severity.ERROR] = "✗",
+                    [vim.diagnostic.severity.WARN] = "⚠",
+                    [vim.diagnostic.severity.INFO] = "ⓘ",
+                    [vim.diagnostic.severity.HINT] = "💡",
+                },
+            },
+            severity_sort = true,
         })
     end,
 

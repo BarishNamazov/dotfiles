@@ -46,6 +46,21 @@ vim.opt.colorcolumn = "80"
 -- Enable the sign column
 vim.opt.signcolumn = "yes"
 
+-- Better window split borders
+vim.opt.fillchars = {
+    vert = "│",
+    horiz = "─",
+    horizup = "┴",
+    horizdown = "┬",
+    vertleft = "┤",
+    vertright = "├",
+    verthoriz = "┼",
+}
+
+-- Always show window separators
+vim.opt.laststatus = 3  -- Global statusline
+vim.opt.winbar = "%=%m %f"  -- Simple winbar with modified flag and filename
+
 -- Set netrw options
 vim.g.netrw_browse_split = 0
 vim.g.netrw_banner = 0

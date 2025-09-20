@@ -45,7 +45,13 @@ return {
     },
 
     {
-        "github/copilot.vim"
+        "github/copilot.vim",
+        config = function()
+            -- Use Tab to accept suggestions (default behavior)
+            -- Manual trigger for suggestions
+            vim.keymap.set('i', '<C-Space>', '<Plug>(copilot-suggest)', { desc = "Trigger Copilot suggestion" })
+            -- Alternative command-based trigger removed - was causing insert mode delays
+        end
     },
 
     {
@@ -64,5 +70,9 @@ return {
         keys = {
             { "<leader>lg", "<cmd>LazyGit<cr>", desc = "LazyGit" }
         }
+    },
+
+    {
+        "tpope/vim-sleuth",
     }
 }

@@ -6,7 +6,30 @@ return {
     },
 
     config = function()
-        require('telescope').setup({})
+        require('telescope').setup({
+            defaults = {
+                file_ignore_patterns = {
+                    "node_modules",
+                    "%.git/",
+                    "target/",
+                    "build/",
+                    "dist/",
+                },
+            },
+            pickers = {
+                find_files = {
+                    hidden = true,
+                },
+                git_files = {
+                    show_untracked = true,
+                },
+                live_grep = {
+                    additional_args = function(opts)
+                        return {"--hidden"}
+                    end
+                },
+            },
+        })
 
         local builtin = require('telescope.builtin')
         vim.keymap.set('n', '<leader>pf', builtin.find_files, { desc = 'Telescope find files' })
@@ -18,14 +41,9 @@ return {
                 builtin.find_files()
             end
         end, {})
-        vim.keymap.set('n', '<leader>pws', function()
-            local word = vim.fn.expand("<cword>")
-            builtin.grep_string({ search = word })
-        end)
-        vim.keymap.set('n', '<leader>pWs', function()
-            local word = vim.fn.expand("<cWORD>")
-            builtin.grep_string({ search = word })
-        end)
-        vim.keymap.set('n', '<leader>vh', builtin.help_tags, {})
+        -- on <leader><leader> open files with their last opened time
+        vim.keymap.set('n', '<leader><leader>', function()
+            builtin.oldfiles({ sort_mru = true, prompt_title = 'Recent Files' })
+        end, { desc = 'Telescope recent files' })
     end
 }
