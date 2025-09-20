@@ -61,11 +61,6 @@ vim.opt.fillchars = {
 vim.opt.laststatus = 3  -- Global statusline
 vim.opt.winbar = "%=%m %f"  -- Simple winbar with modified flag and filename
 
--- Set netrw options
-vim.g.netrw_browse_split = 0
-vim.g.netrw_banner = 0
-vim.g.netrw_winsize = 25
-
 -- We will move stap files into centralized directories to avoid clashes
 -- but still keep them.
 local function ensure_dir_exists(dir)
