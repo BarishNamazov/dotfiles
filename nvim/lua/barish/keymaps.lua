@@ -1,9 +1,6 @@
 -- Set map leader to space
 vim.g.mapleader = " "
 
--- Open the netrw explorer
-vim.keymap.set("n", "<leader>pv", vim.cmd.Ex)
-
 -- Move selected text up and down by a line
 -- and then reindent it
 vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
@@ -32,20 +29,8 @@ vim.keymap.set("n", "<leader>Y", [["+Y]])
 
 -- Format
 vim.keymap.set("n", "<leader>f", function()
-    local conform = require("conform")
-    local buf = vim.api.nvim_get_current_buf()
-    local ft = vim.bo[buf].filetype
-
-    -- Check if Conform has any formatters for this filetype
-    local formatters = conform.list_formatters(buf)
-    if formatters and #formatters > 0 then
-        -- Conform has a formatter, use it
-        conform.format({ async = true, lsp_fallback = true })
-    else
-        -- No formatter configured, use LSP directly
-        vim.lsp.buf.format({ async = true })
-    end
-end, { desc = "Format with Conform or fallback to LSP" })
+    require("conform").format({ async = true, lsp_fallback = true })
+end, { desc = "Format with Conform (fallback to LSP)" })
 
 -- Start find and replace with the word under the cursor
 vim.keymap.set("n", "<leader>s", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]])
