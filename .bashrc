@@ -172,3 +172,6 @@ setup_python_env
 # bun
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
+
+# zoxide - https://github.com/ajeetdsouza/zoxide?tab=readme-ov-file#installation
+eval "$(zoxide init bash)"
