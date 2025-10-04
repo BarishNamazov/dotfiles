@@ -23,3 +23,6 @@
 
 !wofi/
 !wofi/**
+
+!yazi/
+!yazi/**
