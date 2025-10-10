@@ -59,6 +59,7 @@ setup_aliases() {
 
     alias vim=nvim
     alias v=nvim
+    export EDITOR=nvim
 }
 
 setup_prompt_helpers() {
