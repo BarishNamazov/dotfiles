@@ -1,0 +1,70 @@
+#!/usr/bin/env bash
+
+# tmux-tui: simple TUI for tmux sessions
+set -euo pipefail
+
+need() {
+  command -v "$1" >/dev/null 2>&1 || {
+    echo "Missing dependency: $1" >&2
+    exit 1
+  }
+}
+
+need tmux
+need fzf
+
+while true; do
+  # Get session names only; tolerate "no server running" case
+  mapfile -t sessions < <(tmux list-sessions -F "#{session_name}" 2>/dev/null || true)
+  if ((${#sessions[@]} == 0)); then
+    sessions=("<no sessions>")
+  fi
+
+  selection="$(
+    printf '%s\n' "${sessions[@]}" |
+      fzf --multi --reverse --border --height=60% \
+          --prompt="tmux> " \
+          --header=$'Enter: attach  |  Ctrl-n: new  |  Del/Ctrl-d: delete  |  Esc: quit' \
+          --expect=enter,ctrl-n,del,ctrl-d
+  )" || exit 0  # Esc/Ctrl-C
+
+  # First line is the key pressed; the rest are selected items (may be multiple)
+  key=$(awk 'NR==1' <<<"$selection")
+  mapfile -t picks < <(awk 'NR>1' <<<"$selection")
+
+  case "$key" in
+    enter)
+      target="${picks[0]:-}"
+      [[ -z "$target" || "$target" == "<no sessions>" ]] && continue
+      if [[ -n "${TMUX-}" ]]; then
+        tmux switch-client -t "$target"
+      else
+        tmux attach -t "$target"
+      fi
+      ;;
+    ctrl-n)
+      read -rp "New session name: " name
+      [[ -z "${name:-}" ]] && continue
+      if tmux has-session -t "$name" 2>/dev/null; then
+        echo "Session '$name' already exists."
+        sleep 1
+        continue
+      fi
+      tmux new-session -d -s "$name"
+      # Auto-attach when not already inside tmux
+      if [[ -z "${TMUX-}" ]]; then tmux attach -t "$name"; fi
+      ;;
+    del|ctrl-d)
+      # Delete selected sessions (supports multi-select in fzf)
+      for s in "${picks[@]}"; do
+        [[ "$s" == "<no sessions>" || -z "$s" ]] && continue
+        read -rp "Kill session '$s'? [y/N] " ans
+        [[ "$ans" =~ ^[Yy]$ ]] && tmux kill-session -t "$s"
+      done
+      ;;
+    *)
+      exit 0
+      ;;
+  esac
+done
+

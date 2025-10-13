@@ -105,7 +105,7 @@ setup_prompt() {
 
 setup_path() {
     export PATH="$HOME/.local/bin:$PATH"
-    export PATH="$PATH:/usr/local/bin:/usr/local/sbin"
+    export PATH="$PATH:/usr/local/bin:/usr/local/sbin:$XDG_CONFIG_HOME/bin"
     export PATH="$HOME/.npm-global/bin:$PATH"
 }
 
@@ -160,12 +160,12 @@ setup_python_env() {
 # --- run setup -------------------------------------------------------------
 
 setup_aliases
+setup_xdg
 setup_prompt_helpers
 setup_colors
 setup_prompt
 setup_path
 setup_history
-setup_xdg
 setup_completion
 setup_git_ps1
 setup_python_env
