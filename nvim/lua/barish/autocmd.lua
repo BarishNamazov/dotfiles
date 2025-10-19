@@ -35,24 +35,47 @@ autocmd('TextYankPost', {
 
 
 -- Set the working directory to the argument of vim
+-- Handle "nvim oil:///path" and regular paths
 vim.api.nvim_create_autocmd("VimEnter", {
     callback = function()
         local args = vim.fn.argv()
-        if #args > 0 then
-            local path = args[1]
-            local stat = vim.loop.fs_stat(path)
-            if stat then
-                local dir
-                if stat.type == "directory" then
-                    dir = vim.fn.fnamemodify(path, ":p")
-                else
-                    dir = vim.fn.fnamemodify(path, ":p:h")
-                end
-                local ok, err = pcall(vim.cmd, "cd " .. vim.fn.fnameescape(dir))
-                if not ok then
-                    vim.notify("Failed to change directory: " .. err, vim.log.levels.WARN)
-                end
-            end
+        if #args == 0 then
+            return
+        end
+
+        local path = args[1]
+
+        -- Ignore stdin ("-")
+        if path == "-" then
+            return
+        end
+
+        -- Normalize Oil URIs -> filesystem path
+        -- oil:///home/user/foo   -> /home/user/foo
+        -- oil://home/user/foo    -> /home/user/foo (just in case)
+        if path:match("^oil://") then
+            path = path:gsub("^oil:///*", "/")
+        end
+
+        -- If it's a file/dir that exists, cd accordingly
+        local uv = vim.uv or vim.loop
+        local stat = uv.fs_stat(path)
+        if not stat then
+            return
+        end
+
+        local dir
+        if stat.type == "directory" then
+            dir = vim.fn.fnamemodify(path, ":p")
+        else
+            dir = vim.fn.fnamemodify(path, ":p:h")
+        end
+
+        local ok, err = pcall(function()
+            vim.cmd("cd " .. vim.fn.fnameescape(dir))
+        end)
+        if not ok then
+            vim.notify("Failed to change directory: " .. tostring(err), vim.log.levels.WARN)
         end
     end,
 })
