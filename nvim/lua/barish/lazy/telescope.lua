@@ -41,9 +41,14 @@ return {
                 builtin.find_files()
             end
         end, {})
-        -- on <leader><leader> open files with their last opened time
+        -- on <leader><leader> open files from current directory recursively
         vim.keymap.set('n', '<leader><leader>', function()
-            builtin.oldfiles({ sort_mru = true, prompt_title = 'Recent Files' })
-        end, { desc = 'Telescope recent files' })
+            local cwd = vim.fn.getcwd()
+            builtin.oldfiles({
+                cwd_only = true,
+                cwd = cwd,
+                prompt_title = 'Recent Files in Current Directory'
+            })
+        end, { desc = 'Telescope recent files in current directory' })
     end
 }
